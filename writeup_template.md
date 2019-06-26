@@ -20,11 +20,9 @@ The goals / steps of this project are the following:
 [//]: # (Examples images)
 
 [image1]: ./output_images/undistort.png "Undistorted chess"
-[image2]: ./output_images/TestImg_undistorted.png "Undistorted"
+[image2]: ./output_images/undcar.jpg "Undistorted"
 [image3]: ./output_images/Unwarped.jpg "Road Transformed"
 [image4]: ./output_images/result.jpg "Result"
-[image6]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image7]: ./examples/example_output.jpg "Output"
 [image8]: ./output_images/pipeline.jpg "pipeline for all images"
 [image9]: ./output_images/RGB2Lab.jpg "RGB2Lab"
 [image10]: ./output_images/hls_l.jpg "hls_l"
@@ -132,11 +130,11 @@ I implemented this step in lines # through # in my code in `/advanced-lane-findi
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a ![alt text][video1]
+Here's a  [https://github.com/mvshalamov/CarND-Advanced-Lane-Lines/blob/master/output_video/project_video_output.mp4](./output_video/project_video_output.mp4)
 
 #### Chalenge video
 The main problem in this video^ that in some frame we don't find a lines and we must use result frome past frame.
-Here's a ![alt text][video2]
+Here's a [https://github.com/mvshalamov/CarND-Advanced-Lane-Lines/blob/master/output_video/project_video_output.mp4][./output_video/challenge_video.mp4]
 
 ---
 
