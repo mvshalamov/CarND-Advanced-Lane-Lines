@@ -17,15 +17,24 @@ The goals / steps of this project are the following:
 * Warp the detected lane boundaries back onto the original image.
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
-[//]: # (Image References)
+[//]: # (Examples images)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image1]: ./output_images/undistort.png "Undistorted chess"
+[image2]: ./output_images/TestImg_undistorted.png "Undistorted"
+[image3]: ./output_images/Unwarped.jpg "Road Transformed"
+[image4]: ./output_images/result.jpg "Result"
+[image6]: ./examples/color_fit_lines.jpg "Fit Visual"
+[image7]: ./examples/example_output.jpg "Output"
+[image8]: ./output_images/pipeline.jpg "pipeline for all images"
+[image9]: ./output_images/RGB2Lab.jpg "RGB2Lab"
+[image10]: ./output_images/hls_l.jpg "hls_l"
+[image11]: ./output_images/gradient.jpg "gradient"
+[image12]: .output_images/DIR.jpg "dir"
+[image13]: ./output_images/Mag.jpg "mag"
+[image14]: ./output_images/sobel.jpg "sobel"
+[image15]: ./output_images/find_lines.jpg "find_lines"
+[video1]: ./output_video/project_video_output.mp4 "Video"
+[video2]: ./output_video/challenge_video.mp4 "Challenge video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -37,13 +46,11 @@ The goals / steps of this project are the following:
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
 
-You're reading it!
-
 ### Camera Calibration
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the first code cell of the IPython notebook located in "./examples/example.ipynb" (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the first code cell of the IPython notebook located in "./advanced-lane-finding.ipynb".  
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
@@ -60,28 +67,37 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I used a combination of color and gradient thresholds to generate a binary image (see in "./advanced-lane-finding.ipynb".).
 
-![alt text][image3]
+I used many variant of thresholds:
+* abs_sobel_thresh
+![alt text][image14]
+
+* Magnitude of the Gradient
+![alt text][image13]
+
+* Direction of the Gradient
+![alt text][image12]
+
+* combine all gradient method
+![alt text][image11]
+
+* HLS Color Threshold
+![alt text][image10]
+
+* RGB2Lab
+for searching yellow line
+![alt text][image9]
+
+I got a bad result for gradient threshold.
+I got a good result on a combination HLS (L channel) and RGB2Lab threshold in function pipeline.
+
+![alt text][image8]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `unwarp`, which appears in "./advanced-lane-finding.ipynb":
 
-```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-```
-
-This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
@@ -92,23 +108,23 @@ This resulted in the following source and destination points:
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+![alt text][image3]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+In "./advanced-lane-finding.ipynb" i write function search_around_poly, based on course materials. The main difference is the larger return parameters and the definition when we could not find the lines.
 
-![alt text][image5]
+![alt text][image15]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I did this in `./advanced-lane-finding.ipynb` in function `curvature_center`. We calculate `left_lane_p` (left_fit_cr[0]*(y_eval_m)**2 + left_fit_cr[1]*(y_eval_m) + left_fit_cr[2]) and `right_lane_p` and position of vechicle as (left_lane_p + right_lane_p)/2.0. Center we found as deviation from the center of the vehicle.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in lines # through # in my code in `/advanced-lane-finding.ipynb` in the function `process_image`.  Here is an example of my result on a test image:
 
-![alt text][image6]
+![alt text][image4]
 
 ---
 
@@ -116,7 +132,11 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a ![alt text][video1]
+
+#### Chalenge video
+The main problem in this video^ that in some frame we don't find a lines and we must use result frome past frame.
+Here's a ![alt text][video2]
 
 ---
 
@@ -124,4 +144,7 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+* problems arise in the moments when the shadow falls on the road marking
+* problems arise in moments when a motorcycle or car drives in on one lane
+
+For this cases we must found algorithm, which separates shadow well and other vehicles, mayby use ml.
