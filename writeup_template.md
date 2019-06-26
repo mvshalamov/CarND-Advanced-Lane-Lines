@@ -131,11 +131,13 @@ I implemented this step in lines # through # in my code in `/advanced-lane-findi
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a  [https://github.com/mvshalamov/CarND-Advanced-Lane-Lines/blob/master/output_video/project_video_output.mp4]
+Here's a  [project_video] (https://github.com/mvshalamov/CarND-Advanced-Lane-Lines/blob/master/output_video/project_video_output.mp4)
 
 #### Chalenge video
-The main problem in this video^ that in some frame we don't find a lines and we must use result frome past frame.
-Here's a [https://github.com/mvshalamov/CarND-Advanced-Lane-Lines/blob/master/output_video/challenge_video.mp4]
+
+The main problem in this video, that in some frame we don't find a lines and we must use result frome past frame.
+
+Here's a [challenge_video] (https://github.com/mvshalamov/CarND-Advanced-Lane-Lines/blob/master/output_video/challenge_video.mp4)
 ---
 
 ### Discussion
